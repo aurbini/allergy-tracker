@@ -60,25 +60,7 @@ const eslintConfig = defineConfig([
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'warn',
 
-      // Import rules
-      'import/order': [
-        'error',
-        {
-          groups: [
-            'builtin',
-            'external',
-            'internal',
-            'parent',
-            'sibling',
-            'index',
-          ],
-          'newlines-between': 'always',
-          alphabetize: {
-            order: 'asc',
-            caseInsensitive: true,
-          },
-        },
-      ],
+      // Import rules (Prettier handles import ordering)
       'import/no-unresolved': 'off', // TypeScript handles this
       'import/no-duplicates': 'error',
 
@@ -94,18 +76,12 @@ const eslintConfig = defineConfig([
         },
       ],
 
-      // General code quality
+      // General code quality (conflicts with Prettier removed)
       'no-console': 'warn',
       'no-debugger': 'error',
-      'no-duplicate-imports': 'error',
       'no-unused-expressions': 'error',
       'prefer-const': 'error',
       'no-var': 'error',
-      'no-multiple-empty-lines': ['error', { max: 1, maxEOF: 0 }],
-      'no-trailing-spaces': 'error',
-      'eol-last': 'error',
-      semi: 'off', // Let Prettier handle semicolons
-      '@typescript-eslint/semi': 'off', // Let Prettier handle semicolons
 
       // Prettier integration
       'prettier/prettier': 'error',
