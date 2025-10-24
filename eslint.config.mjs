@@ -82,9 +82,17 @@ const eslintConfig = defineConfig([
       'no-unused-expressions': 'error',
       'prefer-const': 'error',
       'no-var': 'error',
+      quotes: 'off', // Let Prettier handle quotes
 
       // Prettier integration
-      'prettier/prettier': 'error',
+      'prettier/prettier': [
+        'error',
+        {
+          singleQuote: true,
+          semi: false,
+          trailingComma: 'es5',
+        },
+      ],
     },
     settings: {
       react: {
