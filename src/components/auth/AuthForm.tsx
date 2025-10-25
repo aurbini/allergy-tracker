@@ -30,7 +30,14 @@ export default function AuthForm({ type }: { type: AuthType }) {
     resolver: zodResolver(schema),
     defaultValues:
       type === 'signup'
-        ? { name: '', email: '', password: '' }
+        ? {
+            name: '',
+            email: '',
+            password: '',
+            city: '',
+            state: '',
+            country: '',
+          }
         : { email: '', password: '' },
   })
 
@@ -40,7 +47,14 @@ export default function AuthForm({ type }: { type: AuthType }) {
     setError('')
     try {
       if (type === 'signup') {
-        await registerUser(data.name, data.email, data.password)
+        await registerUser(
+          data.name,
+          data.email,
+          data.password,
+          data.city,
+          data.state,
+          data.country
+        )
       }
 
       const result = await signIn('credentials', {
@@ -68,19 +82,65 @@ export default function AuthForm({ type }: { type: AuthType }) {
           className="w-full space-y-4"
         >
           {type === 'signup' && (
-            <FormField
-              control={form.control}
-              name={'name' as any}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Name</FormLabel>
-                  <FormControl>
-                    <Input placeholder="John Doe" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <>
+              <FormField
+                control={form.control}
+                name={'name' as any}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="John Doe" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <FormField
+                  control={form.control}
+                  name={'city' as any}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>City</FormLabel>
+                      <FormControl>
+                        <Input placeholder="New York" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name={'state' as any}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>State</FormLabel>
+                      <FormControl>
+                        <Input placeholder="NY" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name={'country' as any}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Country</FormLabel>
+                      <FormControl>
+                        <Input placeholder="USA" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </>
           )}
 
           <FormField
