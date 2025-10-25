@@ -7,9 +7,6 @@ import { db } from '@/db/client'
 import { allergies, users } from '@/db/schema'
 import { authOptions } from '@/lib/authOptions'
 
-const googlePollenApiUrl =
-  'https://pollen.googleapis.com/v1/forecast:lookup?key='
-
 export async function GET(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
@@ -76,8 +73,6 @@ async function fetchPollenData(latitude: string, longitude: string) {
   // Google Pollen API call with correct parameters
   const url = `https://pollen.googleapis.com/v1/forecast:lookup?key=${apiKey}&location.longitude=${longitude}&location.latitude=${latitude}&days=1`
 
-  console.log('API URL:', url) // Debug log
-
   const response = await fetch(url, {
     method: 'GET',
     headers: {
@@ -96,7 +91,18 @@ async function fetchPollenData(latitude: string, longitude: string) {
 }
 
 function matchAllergiesWithPollen(userAllergies: any[], pollenData: any) {
-  const personalizedRisks = []
+  const personalizedRisks: {
+    type: string
+    name: any
+    userAllergy: any
+    severity: any
+    currentIndex: any
+    category: any
+    riskLevel: string
+    recommendation: any
+    inSeason: any
+    plantDescription?: any
+  }[] = []
 
   if (!pollenData.dailyInfo || pollenData.dailyInfo.length === 0) {
     return personalizedRisks
@@ -174,8 +180,8 @@ function getPersonalizedRiskLevel(pollenIndex: number, userSeverity: string) {
     severe: 2,
   }
 
-  const adjustedRisk =
-    pollenIndex * (severityMultiplier[userSeverity.toLowerCase()] || 1)
+  const key = userSeverity.toLowerCase() as keyof typeof severityMultiplier
+  const adjustedRisk = pollenIndex * (severityMultiplier[key] ?? 1)
 
   if (adjustedRisk <= 2) return 'Low'
   if (adjustedRisk <= 4) return 'Moderate'

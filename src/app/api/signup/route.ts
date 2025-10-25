@@ -16,6 +16,6 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Email already in use' }, { status: 400 })
 
   const hashed = await bcrypt.hash(password, 10)
-  await db.insert(users).values({ name, email, passwordHash: hashed })
+  await db.insert(users).values({ name, email, password: hashed })
   return NextResponse.json({ success: true })
 }
