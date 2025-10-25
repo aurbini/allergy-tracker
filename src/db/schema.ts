@@ -9,9 +9,12 @@ import {
 
 export const allergies = pgTable('allergies', {
   id: serial('id').primaryKey(),
-  name: varchar('name', { length: 100 }).notNull(),
-  severity: text('severity').notNull(),
+  type: varchar('type', { length: 50 }).notNull(), // tree, grass, weed
+  pollenName: varchar('pollen_name', { length: 100 }).notNull(), // specific pollen name
+  severity: varchar('severity', { length: 20 }).notNull(), // mild, moderate, severe
   userId: integer('user_id').references(() => users.id),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+  updatedAt: timestamp('updated_at').notNull().defaultNow(),
 })
 
 export const users = pgTable('users', {
