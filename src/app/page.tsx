@@ -1,3 +1,5 @@
+import Link from 'next/link'
+
 import { BarChart3, Bell, Shield, Smartphone, Users, Zap } from 'lucide-react'
 
 import Footer from '@/components/footer'
@@ -30,10 +32,14 @@ export default function Home() {
               help you live better.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg">Start Tracking Now</Button>
-              <Button variant="outline" size="lg">
-                Learn More
-              </Button>
+              <Link href="/signup">
+                <Button size="lg">Start Tracking Now</Button>
+              </Link>
+              <Link href="/login">
+                <Button variant="outline" size="lg">
+                  Login
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
@@ -162,9 +168,11 @@ export default function Home() {
             Join thousands of users who are already managing their allergies
             more effectively with AllergyTracker.
           </p>
-          <Button size="lg" variant="secondary">
-            Get Started Free
-          </Button>
+          <Link href="/signup">
+            <Button size="lg" variant="secondary">
+              Get Started Free
+            </Button>
+          </Link>
         </div>
       </section>
 

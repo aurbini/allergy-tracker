@@ -2,14 +2,16 @@
 
 import { useState } from 'react'
 
+import { signOut, useSession } from 'next-auth/react'
 import Link from 'next/link'
 
-import { Menu, Shield, X } from 'lucide-react'
+import { LogOut, Menu, Shield, X } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
+  const { data: session } = useSession()
 
   return (
     <nav className="bg-white shadow-sm border-b border-gray-200">
@@ -33,25 +35,59 @@ export default function Navbar() {
             >
               Home
             </Link>
-            <Link
-              href="/tracker"
-              className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-            >
-              Track Allergies
-            </Link>
-            <Link
-              href="/history"
-              className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-            >
-              History
-            </Link>
+            {session && (
+              <>
+                <Link
+                  href="/dashboard"
+                  className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                >
+                  Dashboard
+                </Link>
+                <Link
+                  href="/tracker"
+                  className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                >
+                  Track Allergies
+                </Link>
+                <Link
+                  href="/history"
+                  className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                >
+                  History
+                </Link>
+              </>
+            )}
             <Link
               href="/about"
               className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
             >
               About
             </Link>
-            <Button>Get Started</Button>
+
+            {session ? (
+              <div className="flex items-center space-x-2">
+                <span className="text-sm text-gray-600">
+                  Welcome, {session.user?.name}
+                </span>
+                <Button
+                  variant="outline"
+                  onClick={() => signOut()}
+                  className="flex items-center space-x-1"
+                >
+                  <LogOut className="h-4 w-4" />
+                  <span>Logout</span>
+                </Button>
+              </div>
+            ) : (
+              <div className="flex items-center space-x-2">
+                <Link href="/login">
+                  <Button variant="outline">Login</Button>
+                </Link>
+                <Link href="/signup">
+                  <Button>Sign Up</Button>
+                </Link>
+              </div>
+            )}
           </div>
 
           {/* Mobile menu button */}
@@ -80,20 +116,31 @@ export default function Navbar() {
               >
                 Home
               </Link>
-              <Link
-                href="/tracker"
-                className="text-gray-700 hover:text-blue-600 block px-3 py-2 rounded-md text-base font-medium"
-                onClick={() => setIsOpen(false)}
-              >
-                Track Allergies
-              </Link>
-              <Link
-                href="/history"
-                className="text-gray-700 hover:text-blue-600 block px-3 py-2 rounded-md text-base font-medium"
-                onClick={() => setIsOpen(false)}
-              >
-                History
-              </Link>
+              {session && (
+                <>
+                  <Link
+                    href="/dashboard"
+                    className="text-gray-700 hover:text-blue-600 block px-3 py-2 rounded-md text-base font-medium"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    Dashboard
+                  </Link>
+                  <Link
+                    href="/tracker"
+                    className="text-gray-700 hover:text-blue-600 block px-3 py-2 rounded-md text-base font-medium"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    Track Allergies
+                  </Link>
+                  <Link
+                    href="/history"
+                    className="text-gray-700 hover:text-blue-600 block px-3 py-2 rounded-md text-base font-medium"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    History
+                  </Link>
+                </>
+              )}
               <Link
                 href="/about"
                 className="text-gray-700 hover:text-blue-600 block px-3 py-2 rounded-md text-base font-medium"
@@ -101,7 +148,36 @@ export default function Navbar() {
               >
                 About
               </Link>
-              <Button className="w-full mt-2">Get Started</Button>
+
+              {session ? (
+                <div className="flex flex-col space-y-2 mt-2">
+                  <div className="px-3 py-2 text-sm text-gray-600">
+                    Welcome, {session.user?.name}
+                  </div>
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      signOut()
+                      setIsOpen(false)
+                    }}
+                    className="w-full flex items-center justify-center space-x-1"
+                  >
+                    <LogOut className="h-4 w-4" />
+                    <span>Logout</span>
+                  </Button>
+                </div>
+              ) : (
+                <div className="flex flex-col space-y-2 mt-2">
+                  <Link href="/login" className="w-full">
+                    <Button variant="outline" className="w-full">
+                      Login
+                    </Button>
+                  </Link>
+                  <Link href="/signup" className="w-full">
+                    <Button className="w-full">Sign Up</Button>
+                  </Link>
+                </div>
+              )}
             </div>
           </div>
         )}
