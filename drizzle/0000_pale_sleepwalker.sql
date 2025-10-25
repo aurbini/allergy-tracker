@@ -1,8 +1,11 @@
 CREATE TABLE "allergies" (
 	"id" serial PRIMARY KEY NOT NULL,
-	"name" varchar(100) NOT NULL,
-	"severity" text NOT NULL,
-	"user_id" integer
+	"type" varchar(50) NOT NULL,
+	"pollen_name" varchar(100) NOT NULL,
+	"severity" varchar(20) NOT NULL,
+	"user_id" integer,
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE "users" (
