@@ -6,6 +6,7 @@ import { Plus, Shield } from 'lucide-react'
 
 import AllergyList from '@/components/allergies/AllergyList'
 import Navbar from '@/components/navbar'
+import PollenWidget from '@/components/pollen/PollenWidget'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -62,6 +63,9 @@ export default async function DashboardPage() {
 
           {/* Allergies List */}
           <AllergyList />
+
+          {/* Pollen Data */}
+          <PollenWidget />
         </div>
       </div>
     </div>
