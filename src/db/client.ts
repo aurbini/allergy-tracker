@@ -3,23 +3,26 @@ import { Pool } from 'pg'
 
 import * as schema from './schema'
 
-// Supabase connection configuration
+// Environment-based database configuration
+const isProduction = process.env.NODE_ENV === 'production'
+const connectionString = process.env.DATABASE_POSTGRES_URL
+
+console.log('Environment:', process.env.NODE_ENV)
+console.log('Connection string length:', connectionString?.length)
 console.log(
-  'DATABASE_POSTGRES_URL length:',
-  process.env.DATABASE_POSTGRES_URL?.length
+  'Connection string starts with:',
+  connectionString?.substring(0, 20)
 )
-console.log(
-  'DATABASE_POSTGRES_URL starts with:',
-  process.env.DATABASE_POSTGRES_URL?.substring(0, 20)
-)
-console.log(
-  'All env vars with DATABASE:',
-  Object.keys(process.env).filter((key) => key.includes('DATABASE'))
-)
+console.log('Connection string ends with:', connectionString?.substring(-20))
+console.log('Full connection string:', connectionString)
 
 const pool = new Pool({
-  connectionString: process.env.DATABASE_POSTGRES_URL,
-  ssl: false,
+  connectionString,
+  ssl: isProduction
+    ? {
+        rejectUnauthorized: false,
+      }
+    : false,
 })
 
 export const db = drizzle(pool, { schema })
