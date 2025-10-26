@@ -4,6 +4,15 @@ import { Pool } from 'pg'
 import * as schema from './schema'
 
 // Supabase connection configuration
+console.log(
+  'DATABASE_POSTGRES_URL:',
+  process.env.DATABASE_POSTGRES_URL?.substring(0, 20) + '...'
+)
+console.log(
+  'All env vars with DATABASE:',
+  Object.keys(process.env).filter((key) => key.includes('DATABASE'))
+)
+
 const pool = new Pool({
   connectionString: process.env.DATABASE_POSTGRES_URL,
   ssl: {
