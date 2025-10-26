@@ -3,13 +3,13 @@ import { Pool } from 'pg'
 
 import * as schema from './schema'
 
-// Add sslmode=require to connection string for Vercel
-const connectionString = process.env.DATABASE_URL?.includes('sslmode=') 
-  ? process.env.DATABASE_URL 
-  : `${process.env.DATABASE_URL}?sslmode=require`
-
+// Handle SSL for Vercel database - bypass certificate validation
 const pool = new Pool({
-  connectionString
+  connectionString: process.env.DATABASE_POSTGRES_URL,
+  ssl: {
+    rejectUnauthorized: false,
+    checkServerIdentity: () => undefined,
+  },
 })
 
 export const db = drizzle(pool, { schema })
