@@ -3,12 +3,11 @@ import { Pool } from 'pg'
 
 import * as schema from './schema'
 
-// Handle SSL for Vercel database - bypass certificate validation
+// Supabase connection configuration
 const pool = new Pool({
   connectionString: process.env.DATABASE_POSTGRES_URL,
   ssl: {
     rejectUnauthorized: false,
-    checkServerIdentity: () => undefined,
   },
 })
 
