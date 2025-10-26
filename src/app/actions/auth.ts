@@ -18,7 +18,7 @@ export async function registerUser(
 
   // Get coordinates for the location (with rate limiting by email)
   const coordinates = await getCoordinates(city, state, country, email)
-
+  console.log('coordinates', coordinates)
   await db.insert(users).values({
     name,
     email,
