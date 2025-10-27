@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 interface Allergy {
@@ -17,6 +18,7 @@ export default function AllergyList() {
   const [allergies, setAllergies] = useState<Allergy[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [deletingId, setDeletingId] = useState<number | null>(null)
 
   useEffect(() => {
     const fetchAllergies = async () => {
@@ -36,6 +38,30 @@ export default function AllergyList() {
 
     fetchAllergies()
   }, [])
+
+  const handleDelete = async (allergyId: number) => {
+    if (!confirm('Are you sure you want to delete this allergy?')) {
+      return
+    }
+
+    setDeletingId(allergyId)
+    try {
+      const response = await fetch(`/api/allergies?id=${allergyId}`, {
+        method: 'DELETE',
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to delete allergy')
+      }
+
+      // Remove the allergy from the local state
+      setAllergies(allergies.filter((allergy) => allergy.id !== allergyId))
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to delete allergy')
+    } finally {
+      setDeletingId(null)
+    }
+  }
 
   const getSeverityColor = (severity: string) => {
     switch (severity.toLowerCase()) {
@@ -135,6 +161,14 @@ export default function AllergyList() {
                   Added on {new Date(allergy.createdAt).toLocaleDateString()}
                 </p>
               </div>
+              <Button
+                variant="destructive"
+                size="sm"
+                onClick={() => handleDelete(allergy.id)}
+                disabled={deletingId === allergy.id}
+              >
+                {deletingId === allergy.id ? 'Deleting...' : 'Delete'}
+              </Button>
             </div>
           ))}
         </div>
