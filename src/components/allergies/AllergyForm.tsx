@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -97,6 +98,8 @@ export default function AllergyForm({ onSuccess }: AllergyFormProps) {
         throw new Error(errorData.error || 'Failed to save allergy')
       }
 
+      toast.success('Allergy added successfully!')
+
       // Call onSuccess callback if provided, otherwise redirect to dashboard
       if (onSuccess) {
         onSuccess()
@@ -104,7 +107,9 @@ export default function AllergyForm({ onSuccess }: AllergyFormProps) {
         router.push('/dashboard')
       }
     } catch (err: any) {
-      setError(err.message || 'Something went wrong')
+      const errorMessage = err.message || 'Something went wrong'
+      setError(errorMessage)
+      toast.error(errorMessage)
     }
   }
 

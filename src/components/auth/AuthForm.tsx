@@ -7,6 +7,7 @@ import Link from 'next/link'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
 
 import { registerUser } from '@/app/actions/auth'
 import { Button } from '@/components/ui/button'
@@ -55,6 +56,7 @@ export default function AuthForm({ type }: { type: AuthType }) {
           data.state,
           data.country
         )
+        toast.success('Account created successfully!')
       }
 
       const result = await signIn('credentials', {
@@ -64,9 +66,16 @@ export default function AuthForm({ type }: { type: AuthType }) {
         callbackUrl: '/dashboard',
       })
 
-      if (result?.error) setError(result.error)
+      if (result?.error) {
+        setError(result.error)
+        toast.error(result.error)
+      } else {
+        toast.success('Logged in successfully!')
+      }
     } catch (err: any) {
-      setError(err.message || 'Something went wrong')
+      const errorMessage = err.message || 'Something went wrong'
+      setError(errorMessage)
+      toast.error(errorMessage)
     }
   }
 
