@@ -6,6 +6,7 @@ import { signOut, useSession } from 'next-auth/react'
 import Link from 'next/link'
 
 import { LogOut, Menu, Shield, X } from 'lucide-react'
+import toast from 'react-hot-toast'
 
 import { Button } from '@/components/ui/button'
 
@@ -50,19 +51,13 @@ export default function Navbar() {
                   Track Allergies
                 </Link>
                 <Link
-                  href="/history"
+                  href="/symptoms"
                   className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
                 >
-                  History
+                  Track Symptoms
                 </Link>
               </>
             )}
-            <Link
-              href="/about"
-              className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-            >
-              About
-            </Link>
 
             {session ? (
               <div className="flex items-center space-x-2">
@@ -71,7 +66,10 @@ export default function Navbar() {
                 </span>
                 <Button
                   variant="outline"
-                  onClick={() => signOut()}
+                  onClick={() => {
+                    signOut()
+                    toast.success('Logged out successfully!')
+                  }}
                   className="flex items-center space-x-1"
                 >
                   <LogOut className="h-4 w-4" />
@@ -133,21 +131,14 @@ export default function Navbar() {
                     Track Allergies
                   </Link>
                   <Link
-                    href="/history"
+                    href="/symptoms"
                     className="text-gray-700 hover:text-blue-600 block px-3 py-2 rounded-md text-base font-medium"
                     onClick={() => setIsOpen(false)}
                   >
-                    History
+                    Track Symptoms
                   </Link>
                 </>
               )}
-              <Link
-                href="/about"
-                className="text-gray-700 hover:text-blue-600 block px-3 py-2 rounded-md text-base font-medium"
-                onClick={() => setIsOpen(false)}
-              >
-                About
-              </Link>
 
               {session ? (
                 <div className="flex flex-col space-y-2 mt-2">
@@ -158,6 +149,7 @@ export default function Navbar() {
                     variant="outline"
                     onClick={() => {
                       signOut()
+                      toast.success('Logged out successfully!')
                       setIsOpen(false)
                     }}
                     className="w-full flex items-center justify-center space-x-1"

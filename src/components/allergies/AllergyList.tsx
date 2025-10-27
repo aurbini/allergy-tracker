@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from 'react'
 
+import toast from 'react-hot-toast'
+
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -56,8 +58,12 @@ export default function AllergyList() {
 
       // Remove the allergy from the local state
       setAllergies(allergies.filter((allergy) => allergy.id !== allergyId))
+      toast.success('Allergy deleted successfully!')
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to delete allergy')
+      const errorMessage =
+        err instanceof Error ? err.message : 'Failed to delete allergy'
+      setError(errorMessage)
+      toast.error(errorMessage)
     } finally {
       setDeletingId(null)
     }
