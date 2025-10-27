@@ -59,7 +59,11 @@ const POLLEN_DATA = {
   ],
 }
 
-export default function AllergyForm() {
+interface AllergyFormProps {
+  onSuccess?: () => void
+}
+
+export default function AllergyForm({ onSuccess }: AllergyFormProps) {
   const router = useRouter()
   const [selectedType, setSelectedType] = useState<string>('')
   const [error, setError] = useState('')
@@ -93,8 +97,12 @@ export default function AllergyForm() {
         throw new Error(errorData.error || 'Failed to save allergy')
       }
 
-      // Redirect back to dashboard on success
-      router.push('/dashboard')
+      // Call onSuccess callback if provided, otherwise redirect to dashboard
+      if (onSuccess) {
+        onSuccess()
+      } else {
+        router.push('/dashboard')
+      }
     } catch (err: any) {
       setError(err.message || 'Something went wrong')
     }
