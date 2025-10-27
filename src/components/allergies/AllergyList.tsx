@@ -8,6 +8,8 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
+import PollenTypeInfo from './PollenTypeInfo'
+
 interface Allergy {
   id: number
   type: string
@@ -140,45 +142,48 @@ export default function AllergyList() {
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Your Allergies ({allergies.length})</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="space-y-4">
-          {allergies.map((allergy) => (
-            <div
-              key={allergy.id}
-              className="flex items-center justify-between p-4 border rounded-lg bg-gray-50"
-            >
-              <div className="flex-1">
-                <div className="flex items-center gap-2 mb-2">
-                  <h3 className="font-medium text-gray-900">
-                    {allergy.pollenName}
-                  </h3>
-                  <Badge className={getTypeColor(allergy.type)}>
-                    {allergy.type}
-                  </Badge>
-                  <Badge className={getSeverityColor(allergy.severity)}>
-                    {allergy.severity}
-                  </Badge>
-                </div>
-                <p className="text-sm text-gray-500">
-                  Added on {new Date(allergy.createdAt).toLocaleDateString()}
-                </p>
-              </div>
-              <Button
-                variant="destructive"
-                size="sm"
-                onClick={() => handleDelete(allergy.id)}
-                disabled={deletingId === allergy.id}
+    <div className="space-y-6">
+      <PollenTypeInfo />
+      <Card>
+        <CardHeader>
+          <CardTitle>Your Allergies ({allergies.length})</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            {allergies.map((allergy) => (
+              <div
+                key={allergy.id}
+                className="flex items-center justify-between p-4 border rounded-lg bg-gray-50"
               >
-                {deletingId === allergy.id ? 'Deleting...' : 'Delete'}
-              </Button>
-            </div>
-          ))}
-        </div>
-      </CardContent>
-    </Card>
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-2">
+                    <h3 className="font-medium text-gray-900">
+                      {allergy.pollenName}
+                    </h3>
+                    <Badge className={getTypeColor(allergy.type)}>
+                      {allergy.type}
+                    </Badge>
+                    <Badge className={getSeverityColor(allergy.severity)}>
+                      {allergy.severity}
+                    </Badge>
+                  </div>
+                  <p className="text-sm text-gray-500">
+                    Added on {new Date(allergy.createdAt).toLocaleDateString()}
+                  </p>
+                </div>
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  onClick={() => handleDelete(allergy.id)}
+                  disabled={deletingId === allergy.id}
+                >
+                  {deletingId === allergy.id ? 'Deleting...' : 'Delete'}
+                </Button>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+    </div>
   )
 }
