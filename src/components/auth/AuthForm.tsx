@@ -142,7 +142,11 @@ export default function AuthForm({ type }: { type: AuthType }) {
                     <FormItem>
                       <FormLabel>Country</FormLabel>
                       <FormControl>
-                        <Input placeholder="USA" {...field} />
+                        <Input
+                          placeholder="USA"
+                          defaultValue="USA"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
