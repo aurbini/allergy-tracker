@@ -1,21 +1,21 @@
 'use client'
 
 import { useState } from 'react'
-import { Plus, BarChart3, List } from 'lucide-react'
 
+import { BarChart3, List, Plus } from 'lucide-react'
+
+import Navbar from '@/components/navbar'
+import SymptomChart from '@/components/symptoms/SymptomChart'
 import SymptomForm from '@/components/symptoms/SymptomForm'
 import SymptomList from '@/components/symptoms/SymptomList'
-import SymptomChart from '@/components/symptoms/SymptomChart'
-import Navbar from '@/components/navbar'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 
 export default function SymptomsPage() {
   const [activeTab, setActiveTab] = useState<'add' | 'list' | 'chart'>('add')
   const [refreshKey, setRefreshKey] = useState(0)
 
   const handleSymptomAdded = () => {
-    setRefreshKey(prev => prev + 1)
+    setRefreshKey((prev) => prev + 1)
   }
 
   const tabs = [
@@ -27,7 +27,7 @@ export default function SymptomsPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
-      
+
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
@@ -72,13 +72,9 @@ export default function SymptomsPage() {
             </div>
           )}
 
-          {activeTab === 'list' && (
-            <SymptomList key={refreshKey} />
-          )}
+          {activeTab === 'list' && <SymptomList key={refreshKey} />}
 
-          {activeTab === 'chart' && (
-            <SymptomChart key={refreshKey} />
-          )}
+          {activeTab === 'chart' && <SymptomChart key={refreshKey} />}
         </div>
       </div>
     </div>

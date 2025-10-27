@@ -3,76 +3,11 @@
 import { useEffect, useState } from 'react'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-
-interface Date {
-  year: number
-  month: number
-  day: number
-}
-
-interface IndexInfo {
-  code: string
-  displayName: string
-  value: number
-  category: string
-  indexDescription: string
-  color: {
-    green: number
-    blue: number
-  }
-}
-
-interface PlantDescription {
-  type: string
-  family: string
-  season: string
-  specialColors: string
-  specialShapes: string
-  crossReaction: string
-  picture: string
-  pictureCloseup: string
-}
-
-interface PollenTypeInfo {
-  code: string
-  displayName: string
-  inSeason?: boolean
-  indexInfo?: IndexInfo
-  healthRecommendations?: string[]
-}
-
-interface PlantInfo {
-  code: string
-  displayName: string
-  inSeason?: boolean
-  indexInfo?: IndexInfo
-  plantDescription?: PlantDescription
-}
-
-interface DayInfo {
-  date: Date
-  pollenTypeInfo: PollenTypeInfo[]
-  plantInfo: PlantInfo[]
-}
-
-interface PollenData {
-  regionCode: string
-  dailyInfo: DayInfo[]
-  nextPageToken?: string
-}
-
-interface PersonalizedRisk {
-  type: 'pollen' | 'plant'
-  name: string
-  userAllergy: string
-  severity: string
-  currentIndex: number
-  category: string
-  riskLevel: string
-  recommendation: string
-  inSeason?: boolean
-  plantDescription?: any
-}
+import type {
+  PersonalizedRisk,
+  PollenApiResponse,
+  PollenData,
+} from '@/types/pollen'
 
 export default function PollenWidget() {
   const [pollenData, setPollenData] = useState<PollenData | null>(null)
@@ -89,7 +24,7 @@ export default function PollenWidget() {
         if (!response.ok) {
           throw new Error('Failed to fetch pollen data')
         }
-        const data = await response.json()
+        const data: PollenApiResponse = await response.json()
         setPollenData(data.pollenData)
         setPersonalizedRisk(data.personalizedRisk || [])
       } catch (err) {

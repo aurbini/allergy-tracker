@@ -37,26 +37,17 @@ import {
   allergySchema,
 } from '../../schemas/allergySchema'
 
-// Pollen data organized by type
+// Pollen data supported by Open-Meteo API
 const POLLEN_DATA = {
   tree: [
-    { code: 'ALDER', name: 'Alder' },
-    { code: 'ASH', name: 'Ash' },
-    { code: 'BIRCH', name: 'Birch' },
-    { code: 'COTTONWOOD', name: 'Cottonwood' },
-    { code: 'ELM', name: 'Elm' },
-    { code: 'MAPLE', name: 'Maple' },
-    { code: 'OLIVE', name: 'Olive' },
-    { code: 'JUNIPER', name: 'Juniper' },
-    { code: 'OAK', name: 'Oak' },
-    { code: 'PINE', name: 'Pine' },
-    { code: 'CYPRESS_PINE', name: 'Cypress Pine' },
-    { code: 'HAZEL', name: 'Hazel' },
+    { code: 'ALDER', name: 'Alder Pollen' },
+    { code: 'BIRCH', name: 'Birch Pollen' },
+    { code: 'OLIVE', name: 'Olive Pollen' },
   ],
-  grass: [{ code: 'GRAMINALES', name: 'Graminales' }],
+  grass: [{ code: 'GRASS', name: 'Grass Pollen' }],
   weed: [
-    { code: 'RAGWEED', name: 'Ragweed' },
-    { code: 'MUGWORT', name: 'Mugwort' },
+    { code: 'RAGWEED', name: 'Ragweed Pollen' },
+    { code: 'MUGWORT', name: 'Mugwort Pollen' },
   ],
 }
 
@@ -131,6 +122,13 @@ export default function AllergyForm({ onSuccess }: AllergyFormProps) {
         <CardDescription className="text-center">
           Track your specific pollen allergies for personalized insights
         </CardDescription>
+        <div className="bg-blue-50 border border-blue-200 rounded-md p-3 mt-2">
+          <p className="text-sm text-blue-800">
+            <strong>Note:</strong> Only pollen types with real-time data are
+            available. This ensures accurate allergy tracking based on current
+            pollen levels.
+          </p>
+        </div>
       </CardHeader>
       <CardContent>
         <Form {...form}>
