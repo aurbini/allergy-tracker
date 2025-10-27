@@ -1,7 +1,7 @@
 import { getServerSession } from 'next-auth'
 import { type NextRequest, NextResponse } from 'next/server'
 
-import { eq } from 'drizzle-orm'
+import { and, eq } from 'drizzle-orm'
 
 import { db } from '@/db/client'
 import { allergies } from '@/db/schema'
@@ -49,10 +49,7 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       )
     }
-    console.log('Type:', type)
-    console.log('Pollen:', pollen)
-    console.log('Severity:', severity)
-    console.log('User ID:', session.user.id)
+
     // Insert the allergy into the database
     const result = await db.insert(allergies).values({
       type,
@@ -68,6 +65,47 @@ export async function POST(request: NextRequest) {
     })
   } catch (error) {
     console.error('Error adding allergy:', error)
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    )
+  }
+}
+
+export async function DELETE(request: NextRequest) {
+  try {
+    const session = await getServerSession(authOptions)
+
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    const { searchParams } = new URL(request.url)
+    const allergyId = searchParams.get('id')
+
+    if (!allergyId) {
+      return NextResponse.json(
+        { error: 'Allergy ID is required' },
+        { status: 400 }
+      )
+    }
+
+    // Delete the allergy (only if it belongs to the user)
+    await db
+      .delete(allergies)
+      .where(
+        and(
+          eq(allergies.id, parseInt(allergyId)),
+          eq(allergies.userId, parseInt(session.user.id))
+        )
+      )
+
+    return NextResponse.json({
+      success: true,
+      message: 'Allergy deleted successfully',
+    })
+  } catch (error) {
+    console.error('Error deleting allergy:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
